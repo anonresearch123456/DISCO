@@ -1,0 +1,19 @@
+_target_: sauce.simulation_data_multibias.MultiBiasSimulationDataModule3D
+data_name: ComplexSim
+
+num_workers: 8
+metadata:
+  n_classes: null
+  n_channels: 1
+  distractors:
+    bias:
+      # only for adversarial
+      distractor_type: vector
+      dim: 5
+batch_size: 1024
+dataset_size: 8192
+image_size: 32
+sigma: 5
+seed: ${seed}
+use_holdout_to_train: false
+holdout_ratio: ${model.holdout_ratio}

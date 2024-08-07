@@ -1,0 +1,31 @@
+_target_: sauce.standard.CIRCE
+model_name: circe
+num_classes: ${data.metadata.n_classes}
+distractors: ${data.metadata.distractors}
+lr: 0.0001
+wd: 0.0005
+# parameters taken from their yale_b config
+circe_lambda: 1.0
+kernel_z:
+  sigma2: 0.1
+kernel_ft:
+  sigma2: 0.1
+kernel_y:
+  sigma2: 0.1
+ridge_lambda: 0.01
+holdout_ratio: 0.1
+use_holdout_to_train: False
+n_last_reg_layers: 2
+loo_cond_mean: True
+biased: False
+centered_circe: True
+net:
+  _target_: sauce.networks.Network
+  network_name: custom
+  n_outputs: ${data.metadata.n_classes}
+  block_type: resnet
+  in_channels: ${data.metadata.n_channels}
+  n_blocks: 4
+  threed: true
+  n_basefilters: 32
+  layer_size: 2

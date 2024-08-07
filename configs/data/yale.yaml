@@ -1,0 +1,18 @@
+_target_: sauce.yale_b.YaleDataModule
+data_name: ExtendedYaleB
+
+dataset: ${data_dir}/${data.data_name}
+batch_size: 256
+num_workers: 16
+metadata:
+  n_classes: null  # None means regression
+  n_channels: 3
+  distractors:
+    illumination:
+      distractor_type: continuous
+      dim: 1
+nl_type: y-cone
+noise: 2
+holdout_ratio: ${model.holdout_ratio}  # for CIRCE
+use_holdout_to_train: False  # in their code they don't use it. This should be set by the experiment!
+ood: False

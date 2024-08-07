@@ -1,0 +1,63 @@
+experiment_dir: ${experiment_name}/model-${data.data_name}/model-${model.model_name}/lr-${model.lr}/wd-${model.wd}
+experiment_name: debug
+data_dir: /mnt/datasets
+validation_metric: loss
+validation_mode: min
+
+debug: False
+
+hydra:
+  run:
+    dir: results/${experiment_dir}
+  job:
+    chdir: True
+  sweep:
+    dir: results
+    subdir: ${experiment_dir}
+
+defaults:
+  - _self_
+  - data: MultiBiassimulation3D.yaml
+  - model: resnet
+
+data:
+  seed: ${seed}
+
+callbacks:
+  lr_monitor:
+    _target_: pytorch_lightning.callbacks.LearningRateMonitor
+    logging_interval: step
+    log_momentum: False
+  model_checkpoint:
+    _target_: pytorch_lightning.callbacks.ModelCheckpoint
+    monitor: val/${validation_metric}
+    mode: ${validation_mode}
+    save_top_k: 1
+    save_last: True
+    dirpath: checkpoints/
+    filename: "{epoch}-${validation_metric}"
+
+logger:
+  tensorboard:
+    _target_: pytorch_lightning.loggers.tensorboard.TensorBoardLogger
+    save_dir: logs/
+    name: ""
+    version: ""
+    log_graph: False
+    default_hp_metric: True
+    prefix: ""
+
+trainer:
+  _target_: pytorch_lightning.Trainer
+  accelerator: gpu
+  devices: 1
+  min_epochs: 1
+  max_epochs: 50
+  enable_progress_bar: True
+  detect_anomaly: False
+  log_every_n_steps: 8
+  enable_checkpointing: True
+  deterministic: warn
+  num_sanity_val_steps: 0
+
+seed: 1312

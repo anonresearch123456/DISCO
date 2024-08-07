@@ -1,0 +1,21 @@
+_target_: sauce.standard.ConditionalDcorRegularization
+model_name: cdcor
+num_classes: ${data.metadata.n_classes}
+distractors: ${data.metadata.distractors}
+lr: 0.0001
+wd: 0.0005
+bandwidth: 0.1
+dcor_lambda: 10.0
+n_last_reg_layers: 2
+holdout_ratio: 0.0
+use_holdout_to_train: False
+net:
+  _target_: sauce.networks.Network
+  network_name: custom
+  n_outputs: ${data.metadata.n_classes}
+  block_type: resnet
+  in_channels: ${data.metadata.n_channels}
+  n_blocks: 4
+  threed: true
+  n_basefilters: 32
+  layer_size: 2
